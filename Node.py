@@ -7,6 +7,8 @@ class Node(object):
 		message = ""
 		while True:
 			data = sock.recv(4096)
+			if not data:
+				break
 			message+=data
 			if delimeter in data:
 				break
