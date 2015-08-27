@@ -16,7 +16,7 @@ class Client(Node):
 		self.sendMsg(self.sock ,self.passwd)
 		message = self.recvMsg(self.sock , '\n')
 		if message.replace('\n' , '')!='~q':
-			username = raw_input()
+			username = raw_input(colored.yellow("Enter your username: "))
 			Thread(target=self.sends , args = (username,)).start()
 			Thread(target=self.recvs , args=('\n',)).start()
 		else:
@@ -27,14 +27,14 @@ class Client(Node):
 			msg = raw_input()
 			# signal.signal(signal.SIGINT , signal_handler)
 			print "\033[A                             \033[A"
-			print "<me>" , msg
+			print colored.yellow("<me>") , colored.magenta(msg)
 			if msg=='~q':
 				msg+='\n'
 				self.sendMsg(self.sock , msg)
 				self.sock.shutdown(socket.SHUT_WR)
 				break
 			msg+='\n'
-			msg = '<' + username + '>' + msg
+			msg = '<' + username + '> ' + msg
 			self.sendMsg(self.sock , msg)
 	def recvs(self , delimeter):
 		while True:
@@ -43,7 +43,9 @@ class Client(Node):
 				# self.sock.shutdown(socket.SHUT_RD)
 				self.sock.close()
 				break
-			print msg.replace('\n' , '')
+			msg =  msg.replace('\n' , '')
+			ind = msg.index('>')
+			print colored.yellow(msg[0:ind+1]) , colored.red(msg[ind+1:])
 
 def signal_handler(signal , frame):
 	print "Ok! The client wants to shut down!"
