@@ -5,15 +5,22 @@ from clint.textui import colored
 
 class Client(Node):
 
-	def __init__(self , host , port):
+	def __init__(self , host , port , passwd):
 		self.host = host
 		self.port = port
+		self.passwd = passwd + '\n'
 		self.sock = socket.socket(socket.AF_INET , socket.SOCK_STREAM)
 
-	def start(self , username):
+	def start(self):
 		self.sock.connect((self.host , self.port))
-		Thread(target=self.sends , args = (username,)).start()
-		Thread(target=self.recvs , args=('\n',)).start()
+		self.sendMsg(self.sock ,self.passwd)
+		message = self.recvMsg(self.sock , '\n')
+		if message.replace('\n' , '')!='~q':
+			username = raw_input()
+			Thread(target=self.sends , args = (username,)).start()
+			Thread(target=self.recvs , args=('\n',)).start()
+		else:
+			sys.exit(0)
 
 	def sends(self , username):
 		while True: 
@@ -43,6 +50,5 @@ def signal_handler(signal , frame):
 
 
 if __name__=='__main__':
-	client = Client(sys.argv[1] , 1060)
-	username = raw_input()
-	client.start(username)
+	client = Client(sys.argv[1] , 1060 , sys.argv[2])
+	client.start()

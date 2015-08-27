@@ -5,9 +5,10 @@ from Node import Node
 
 class Server(Node):
 
-	def __init__(self , host , port):
+	def __init__(self , host , port , passwd):
 		self.host = host
 		self.port = port
+		self.passwd = passwd
 		self.sock = socket.socket(socket.AF_INET , socket.SOCK_STREAM)
 		self.sock.setsockopt(socket.SOL_SOCKET , socket.SO_REUSEADDR , 1)
 		self.registered_clients = []
@@ -30,8 +31,14 @@ class Server(Node):
 			sc.close()
 		while True:
 			sc , peeraddr = self.sock.accept()
-			self.registerClient(sc)
-			Thread(target=chat , args=(sc,)).start()
+			msg = self.recvMsg(sc , '\n')
+			if msg.replace('\n' , '') == self.passwd:
+				self.sendMsg(sc , 'q\n')
+				self.registerClient(sc)
+				Thread(target=chat , args=(sc,)).start()
+			else:
+				self.sendMsg(sc , '~q\n')
+				sc.close()
 
 	def registerClient(self , sc):
 		if sc not in self.registered_clients:
@@ -52,6 +59,6 @@ def signal_handler(signal , frame):
 	sys.exit(0)
 
 if __name__=='__main__':
-	server = Server(sys.argv[1] , 1060)
+	server = Server(sys.argv[1] , 1060 , sys.argv[2])
 	server.start()
 	signal.signal(signal.SIGINT , signal_handler)
