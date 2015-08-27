@@ -24,8 +24,10 @@ class Client(Node):
 
 	def sends(self , username):
 		while True: 
-			msg = raw_input("<me>")
+			msg = raw_input()
 			# signal.signal(signal.SIGINT , signal_handler)
+			print "\033[A                             \033[A"
+			print "<me>" , msg
 			if msg=='~q':
 				msg+='\n'
 				self.sendMsg(self.sock , msg)
