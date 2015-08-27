@@ -53,12 +53,10 @@ class Server(Node):
 		if sc in self.registered_clients:
 			self.registered_clients.remove(sc)
 
-def signal_handler(signal , frame):
-	print "Ok! The client wants to shut down!"
-	self.sock.close()
-	sys.exit(0)
-
-if __name__=='__main__':
-	server = Server(sys.argv[1] , 1060 , sys.argv[2])
-	server.start()
-	signal.signal(signal.SIGINT , signal_handler)
+def main(argv):
+	server = Server(argv[0] , 1060 , argv[1])
+	try:
+		server.start()
+	except KeyboardInterrupt:
+		print "Ok! stopping the server!"
+		sys.exit(0)

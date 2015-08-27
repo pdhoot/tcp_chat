@@ -47,12 +47,6 @@ class Client(Node):
 			ind = msg.index('>')
 			print colored.yellow(msg[0:ind+1]) , colored.red(msg[ind+1:])
 
-def signal_handler(signal , frame):
-	print "Ok! The client wants to shut down!"
-	self.sock.close()
-	sys.exit(0)
-
-
-if __name__=='__main__':
-	client = Client(sys.argv[1] , 1060 , sys.argv[2])
+def main(argv):
+	client = Client(argv[0] , 1060 , argv[1])
 	client.start()
