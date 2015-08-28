@@ -1,2 +1,4 @@
 *.pyc
 tcp-chat/*.pyc
+dist
+tcp_chat.egg-info

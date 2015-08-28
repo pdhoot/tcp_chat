@@ -5,12 +5,11 @@ except ImportError:
 
 setup(
 	name = 'tcp_chat' , 
-	version = '0.1',
+	version = '0.1.1',
 	description = 'A chat app built over TCP',
-	long_description = open('README.md').read(),
 	author = 'Punit Dhoot' , 
 	author_email = 'punitdhoot1@gmail.com',
-	url = 'https://github.com/pdhoot/tcp-chat' ,
+	url = 'https://github.com/pdhoot/tcp_chat' ,
 	license='MIT',
 	packages = ['tcp_chat'],
 	install_requires = ['clint'],
